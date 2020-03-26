@@ -1,10 +1,14 @@
 const express = require('express')
 const server = express()
+const mongoose = require('mongoose')
 
-const router = require('./routes/index')
+const dbURI = 'mongodb://localhost/TDD'
+mongoose.connect(dbURI, {useUnifiedTopology: true, useNewUrlParser: true})
 
-server.use('/', router)
+server.use(express.json())
 
-server.listen(3000, () => {
-    console.log('listening on 3000')
-})
+const todoRoutes = require('./routes/todo_routes')
+
+server.use('/todos', todoRoutes)
+
+module.exports = server

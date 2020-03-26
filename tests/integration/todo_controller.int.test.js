@@ -1,12 +1,12 @@
 const req = require('supertest')
-const app = require('../../app')
+const server = require('../../index')
 const newTodo = require('../mock-data/new-todo.json')
 
 const endpointUrl = '/todos/'
 
 describe(endpointUrl, () => {
-    it('POST ' + endpointUrl, () => {
-        const res = await req(app)
+    it('POST ' + endpointUrl, async () => {
+        const res = await req(server)
             .post(endpointUrl)
             .send(newTodo)
             expect(res.statusCode).toBe(201)
