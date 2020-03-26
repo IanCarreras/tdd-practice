@@ -11,4 +11,7 @@ const todoRoutes = require('./routes/todo_routes')
 
 server.use('/todos', todoRoutes)
 
+server.use((error, req, res, next) => {
+    res.status(500).json({ message: error.message })
+})
 module.exports = server
