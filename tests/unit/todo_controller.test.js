@@ -32,6 +32,27 @@ describe('todo controller get todos', () => {
         expect(res._isEndCalled()).toBeTruthy()
         expect(res._getJSONData()).toStrictEqual(allTodos)
     })
+
+    it('should handle errors', async () => {
+        const errorMessage = { message: 'todos not found' }
+        const rejectedPromise = Promise.reject(errorMessage)
+        
+        TodoModel.find.mockReturnValue(rejectedPromise)
+        await TodoController.getTodos(req, res, next)
+
+        expect(next).toBeCalledWith(errorMessage)
+    })
+})
+
+describe('todo controller get todo by id', () => {
+    it('should have a get todo by id function', () => {
+        expect(typeof TodoController.getTodoById).toBe('function')
+    })
+
+    it('should call TodoModel.find(id)', async () => {
+        await TodoController.getTodoById(req, res, next)
+        expect(TodoModel.find).toHaveBeenCalledWith()
+    })
 })
 
 describe('todo controller creates todo', () => {
@@ -63,7 +84,7 @@ describe('todo controller creates todo', () => {
         expect(res._getJSONData()).toStrictEqual(newTodo)
     })
 
-    it('should hande errors', async () => {
+    it('should handle errors', async () => {
         const errorMessage = { message: 'done property missing'}
         const rejectedPromise = Promise.reject(errorMessage)
 
